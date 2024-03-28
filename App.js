@@ -1,14 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
-import tw from 'twrnc';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { useFonts } from 'expo-font';
+import AppNavigation from './src/navigation';
 
 export default function App() {
-  return (
-    <View style={tw`flex-1 justify-center items-center bg-white`}>
-      <TouchableOpacity style={tw`bg-indigo-500 p-3 rounded-lg shadow-md`}>
-        <Text style={tw`text-white text-3xl font-bold`}>Hello, World!</Text>
-      </TouchableOpacity>
-      <StatusBar style='light' />
-    </View>
-  );
+  let [fontsLoaded] = useFonts({
+    'Quicksand-Bold': require('./assets/fonts/Quicksand/Quicksand-Bold.ttf'),
+    'Comfortaa-Light': require('./assets/fonts/Comfortaa/Comfortaa-Light.ttf'),
+    'Comfortaa-Bold': require('./assets/fonts/Comfortaa/Comfortaa-Bold.ttf'),
+    'SofiaSans-Bold': require('./assets/fonts/SofiaSans/SofiaSans-Bold.ttf'),
+    'SofiaSans-ExtraBold': require('./assets/fonts/SofiaSans/SofiaSans-ExtraBold.ttf'),
+  });
+
+  if (fontsLoaded) {
+    return <AppNavigation />;
+  }
 }

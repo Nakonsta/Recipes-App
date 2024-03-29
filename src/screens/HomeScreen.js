@@ -17,6 +17,7 @@ import {
   TextInput,
 } from 'react-native';
 import Categories from '../components/Categories';
+import Recipes from '../components/Recipes';
 
 const Greeting = styled.Text`
   padding: 20px 0 5px;
@@ -34,7 +35,8 @@ const Greeting2 = styled.Text`
 export default function HomeScreen() {
   const [activeCategory, setActiveCategory] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [categories, setCategories] = useState();
+  const [recipes, setRecipes] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const computedComments = useMemo(() => {
     return categories?.[0];
@@ -53,8 +55,21 @@ export default function HomeScreen() {
       });
   };
 
+  const fetchRecipes = () => {
+    axios
+      .get(`https://food-backend-2024-f556bc1359f3.herokuapp.com/recipes`)
+      .then(({ data }) => {
+        setRecipes(data);
+      })
+      .catch((err) => {
+        console.log(err);
+        Alert.alert('Ошибка', 'Ошибка при получении рецептов');
+      });
+  };
+
   useEffect(() => {
     fetchCategories();
+    fetchRecipes();
   }, []);
 
   return (
@@ -78,7 +93,6 @@ export default function HomeScreen() {
         </View>
         <View style={tw`mb-2`}>
           <Greeting>Привет!</Greeting>
-          <Greeting2>Самое время приготовить что-нибудь вкусное)</Greeting2>
         </View>
         <View
           style={{
@@ -86,7 +100,6 @@ export default function HomeScreen() {
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: 10,
             borderWidth: 0.5,
             borderColor: '#777',
             borderRadius: 20,
@@ -111,7 +124,16 @@ export default function HomeScreen() {
           </View>
         </View>
         <View>
-          {categories?.length && <Categories categories={categories} />}
+          {categories?.length > 0 && (
+            <Categories
+              categories={categories}
+              activeCategory={activeCategory}
+              setActiveCategory={setActiveCategory}
+            />
+          )}
+        </View>
+        <View>
+          <Recipes recipes={recipes} />
         </View>
       </ScrollView>
     </SafeAreaView>

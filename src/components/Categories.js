@@ -1,11 +1,14 @@
 import tw from 'twrnc';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
 import styled from 'styled-components/native';
+import Animated, { FadeInDown, FadeOut } from 'react-native-reanimated';
 import React from 'react';
-import { View, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  View,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+} from 'react-native';
 
 const CategoryItem = styled.View`
   flex-direction: row;
@@ -27,26 +30,52 @@ const CategoryText = styled.Text`
   color: white;
 `;
 
-export default function Categories({ categories }) {
+export default function Categories({
+  categories,
+  activeCategory,
+  setActiveCategory,
+}) {
   return (
-    <View>
+    <Animated.View entering={FadeInDown.duration(800).springify()}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 0, paddingTop: 10 }}
+        contentContainerStyle={{ paddingHorizontal: 0, paddingTop: 5 }}
       >
-        {categories?.length &&
+        {categories?.length > 0 &&
           categories.map((category, index) => {
+            const isActive = category?.id === activeCategory?.id;
+
             return (
-              <TouchableOpacity key={index} style={tw`flex items-center pt-2`}>
-                <CategoryItem>
+              <TouchableOpacity
+                key={index}
+                style={tw`flex items-center pt-2`}
+                onPress={() => setActiveCategory(category)}
+              >
+                <CategoryItem
+                  style={{
+                    borderColor: isActive ? 'orange' : 'white',
+                  }}
+                >
                   <CategoryImg source={{ uri: category.image }}></CategoryImg>
-                  <CategoryText>{category.title}</CategoryText>
+                  <CategoryText
+                    style={{
+                      color: isActive ? 'orange' : 'white',
+                    }}
+                  >
+                    {category.title}
+                  </CategoryText>
                 </CategoryItem>
               </TouchableOpacity>
             );
           })}
       </ScrollView>
-    </View>
+    </Animated.View>
   );
 }
+
+const styles = StyleSheet.create({
+  categoryItem: {
+    backgroundColor: 'violet',
+  },
+});

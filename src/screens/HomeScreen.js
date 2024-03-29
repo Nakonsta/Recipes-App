@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import Categories from '../components/Categories';
 import Recipes from '../components/Recipes';
+import Loading from '../components/Loading';
 
 const Greeting = styled.Text`
   padding: 20px 0 5px;
@@ -38,16 +39,18 @@ export default function HomeScreen() {
   const [recipes, setRecipes] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  const computedComments = useMemo(() => {
-    return categories?.[0];
-  }, [categories]);
+  const recipesOfActiveCategory = useMemo(() => {
+    const activeCategoryId = activeCategory?.id ? activeCategory.id : 2;
+
+    return recipes.filter((recipe) => recipe.categoryId === activeCategoryId);
+  }, [recipes, activeCategory]);
 
   const fetchCategories = () => {
     axios
       .get(`https://food-backend-2024-f556bc1359f3.herokuapp.com/categories`)
       .then(({ data }) => {
         setCategories(data);
-        if (data?.length) setActiveCategory(data[0]);
+        if (data?.length) setActiveCategory(data[1]);
       })
       .catch((err) => {
         console.log(err);
@@ -56,10 +59,12 @@ export default function HomeScreen() {
   };
 
   const fetchRecipes = () => {
+    setIsLoading(true);
     axios
       .get(`https://food-backend-2024-f556bc1359f3.herokuapp.com/recipes`)
       .then(({ data }) => {
         setRecipes(data);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -133,7 +138,11 @@ export default function HomeScreen() {
           )}
         </View>
         <View>
-          <Recipes recipes={recipes} />
+          {isLoading ? (
+            <Loading size='large' style={tw`pt-20`} />
+          ) : (
+            <Recipes recipes={recipesOfActiveCategory} />
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

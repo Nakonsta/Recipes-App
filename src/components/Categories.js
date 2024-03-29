@@ -73,9 +73,3 @@ export default function Categories({
     </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  categoryItem: {
-    backgroundColor: 'violet',
-  },
-});

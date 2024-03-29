@@ -7,6 +7,7 @@ import Animated, { FadeInDown, FadeOut } from 'react-native-reanimated';
 import MasonryList from '@react-native-seoul/masonry-list';
 import { View, Text, Pressable, Image } from 'react-native';
 import React from 'react';
+import Loading from './Loading';
 
 export default function Recipes({ recipes }) {
   return (
@@ -21,17 +22,30 @@ export default function Recipes({ recipes }) {
         Рецепты
       </Text>
       <View>
-        <MasonryList
-          data={recipes}
-          keyExtractor={(item) => item.id}
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item, i }) => <RecipeCard item={item} index={i} />}
-          // refreshing={isLoadingNext}
-          // onRefresh={() => refetch({ first: ITEM_CNT })}
-          onEndReachedThreshold={0.1}
-          // onEndReached={() => loadNext(ITEM_CNT)}
-        />
+        {recipes.length === 0 ? (
+          <Text
+            style={{
+              paddingTop: 16,
+              fontSize: hp(1.5),
+              color: 'white',
+              fontFamily: 'Comfortaa-Light',
+            }}
+          >
+            В данной категории рецептов нет
+          </Text>
+        ) : (
+          <MasonryList
+            data={recipes}
+            keyExtractor={(item) => item.id}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item, i }) => <RecipeCard item={item} index={i} />}
+            // refreshing={isLoadingNext}
+            // onRefresh={() => refetch({ first: ITEM_CNT })}
+            onEndReachedThreshold={0.1}
+            // onEndReached={() => loadNext(ITEM_CNT)}
+          />
+        )}
       </View>
     </View>
   );
@@ -41,7 +55,13 @@ const RecipeCard = ({ item, index }) => {
   let isOdd = index % 2 === 0;
 
   return (
-    <Animated.View entering={FadeInDown.delay(index * 100)} style={tw`pt-3`}>
+    <Animated.View
+      entering={FadeInDown.delay(index * 100)
+        .duration(600)
+        .springify()
+        .damping(12)}
+      style={tw`pt-3`}
+    >
       <Pressable
         style={{
           width: '100%',

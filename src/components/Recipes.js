@@ -5,11 +5,13 @@ import {
 } from 'react-native-responsive-screen';
 import Animated, { FadeInDown, FadeOut } from 'react-native-reanimated';
 import MasonryList from '@react-native-seoul/masonry-list';
+import { useNavigation } from '@react-navigation/native';
 import { View, Text, Pressable, Image } from 'react-native';
 import React from 'react';
-import Loading from './Loading';
 
-export default function Recipes({ recipes }) {
+export default function Recipes({ recipes, ingredients, measures }) {
+  const navigation = useNavigation();
+
   return (
     <View style={tw`pt-6`}>
       <Text
@@ -39,7 +41,15 @@ export default function Recipes({ recipes }) {
             keyExtractor={(item) => item.id}
             numColumns={2}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item, i }) => <RecipeCard item={item} index={i} />}
+            renderItem={({ item, i }) => (
+              <RecipeCard
+                index={i}
+                item={item}
+                navigation={navigation}
+                ingredients={ingredients}
+                measures={measures}
+              />
+            )}
             // refreshing={isLoadingNext}
             // onRefresh={() => refetch({ first: ITEM_CNT })}
             onEndReachedThreshold={0.1}
@@ -51,8 +61,13 @@ export default function Recipes({ recipes }) {
   );
 }
 
-const RecipeCard = ({ item, index }) => {
+const RecipeCard = ({ item, index, navigation, ingredients, measures }) => {
   let isOdd = index % 2 === 0;
+  const paramsInfo = {
+    item,
+    ingredients,
+    measures,
+  };
 
   return (
     <Animated.View
@@ -70,6 +85,7 @@ const RecipeCard = ({ item, index }) => {
           paddingLeft: isOdd ? 0 : 8,
           paddingRight: isOdd ? 8 : 0,
         }}
+        onPress={() => navigation.navigate('RecipeDetailed', { ...paramsInfo })}
       >
         <Image
           source={{ uri: item.imageUrl }}

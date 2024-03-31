@@ -27,17 +27,13 @@ const Greeting = styled.Text`
   color: white;
 `;
 
-const Greeting2 = styled.Text`
-  font-size: 16px;
-  font-family: 'Comfortaa-Light';
-  color: white;
-`;
-
 export default function HomeScreen() {
   const [activeCategory, setActiveCategory] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [ingredients, setIngredients] = useState();
+  const [measures, setMeasures] = useState();
 
   const recipesOfActiveCategory = useMemo(() => {
     const activeCategoryId = activeCategory?.id ? activeCategory.id : 2;
@@ -72,9 +68,35 @@ export default function HomeScreen() {
       });
   };
 
+  const fetchMeasures = () => {
+    axios
+      .get(`https://food-backend-2024-f556bc1359f3.herokuapp.com/measures`)
+      .then(({ data }) => {
+        setMeasures(data);
+      })
+      .catch((err) => {
+        console.log(err);
+        Alert.alert('Ошибка', 'Ошибка при получении единиц измерения');
+      });
+  };
+
+  const fetchIngredients = () => {
+    axios
+      .get(`https://food-backend-2024-f556bc1359f3.herokuapp.com/ingredients`)
+      .then(({ data }) => {
+        setIngredients(data);
+      })
+      .catch((err) => {
+        console.log(err);
+        Alert.alert('Ошибка', 'Ошибка при получении ингредиентов');
+      });
+  };
+
   useEffect(() => {
     fetchCategories();
     fetchRecipes();
+    fetchMeasures();
+    fetchIngredients();
   }, []);
 
   return (
@@ -141,7 +163,11 @@ export default function HomeScreen() {
           {isLoading ? (
             <Loading size='large' style={tw`pt-20`} />
           ) : (
-            <Recipes recipes={recipesOfActiveCategory} />
+            <Recipes
+              recipes={recipesOfActiveCategory}
+              ingredients={ingredients}
+              measures={measures}
+            />
           )}
         </View>
       </ScrollView>

@@ -2,13 +2,7 @@ import tw from 'twrnc';
 import styled from 'styled-components/native';
 import Animated, { FadeInDown, FadeOut } from 'react-native-reanimated';
 import React from 'react';
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  Text,
-} from 'react-native';
+import { View, ScrollView, Pressable, StyleSheet, Text } from 'react-native';
 
 const CategoryItem = styled.View`
   flex-direction: row;
@@ -47,7 +41,7 @@ export default function Categories({
             const isActive = category?.id === activeCategory?.id;
 
             return (
-              <TouchableOpacity
+              <Pressable
                 key={index}
                 style={tw`flex items-center pt-2`}
                 onPress={() => setActiveCategory(category)}
@@ -66,7 +60,7 @@ export default function Categories({
                     {category.title}
                   </CategoryText>
                 </CategoryItem>
-              </TouchableOpacity>
+              </Pressable>
             );
           })}
       </ScrollView>

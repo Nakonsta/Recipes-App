@@ -6,6 +6,7 @@ import {
 } from 'react-native-responsive-screen';
 import { StatusBar } from 'expo-status-bar';
 import styled from 'styled-components/native';
+import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import {
   ChevronLeftIcon,
@@ -71,8 +72,9 @@ export default function RecipeDetailedScreen(props) {
             }}
           ></Image>
         </RecipeImage>
-        <View
-          style={tw`w-full absolute flex-row justify-between items-center pt-14`}
+        <Animated.View
+          entering={FadeIn.delay(200).duration(1000)}
+          style={tw`w-full absolute flex-row justify-between items-center pt-40`}
         >
           <Pressable
             style={tw`p-2 rounded-full ml-5 bg-white bg-opacity-75`}
@@ -80,11 +82,13 @@ export default function RecipeDetailedScreen(props) {
           >
             <ChevronLeftIcon size={hp(2.5)} strokeWidth={3} color='#444' />
           </Pressable>
-        </View>
-        {isLoading && <Loading size='large' style={tw`pt-14`} />}
-        {recipe && (
+        </Animated.View>
+        {item && (
           <View style={tw`flex justify-between pt-8 mx-4`}>
-            <View style={tw``}>
+            <Animated.View
+              entering={FadeInDown.duration(700).springify().damping(12)}
+              style={tw``}
+            >
               <Text
                 style={{
                   fontSize: hp(3),
@@ -104,8 +108,11 @@ export default function RecipeDetailedScreen(props) {
               >
                 {item.description}
               </Text>
-            </View>
-            <View style={tw`flex-row justify-around pt-3`}>
+            </Animated.View>
+            <Animated.View
+              entering={FadeInDown.delay(100).duration(700)}
+              style={tw`flex-row justify-around pt-3`}
+            >
               <View style={tw`flex rounded-full bg-amber-300 p-2`}>
                 <View
                   style={{
@@ -250,8 +257,14 @@ export default function RecipeDetailedScreen(props) {
                   </Text>
                 </View>
               </View>
-            </View>
-            <View style={tw`pt-6`}>
+            </Animated.View>
+            <Animated.View
+              entering={FadeInDown.delay(200)
+                .duration(700)
+                .springify()
+                .damping(12)}
+              style={tw`pt-6`}
+            >
               <Text
                 style={{
                   flex: 1,
@@ -275,8 +288,14 @@ export default function RecipeDetailedScreen(props) {
                   );
                 })}
               </View>
-            </View>
-            <View style={tw`pt-6`}>
+            </Animated.View>
+            <Animated.View
+              entering={FadeInDown.delay(200)
+                .duration(700)
+                .springify()
+                .damping(12)}
+              style={tw`pt-6`}
+            >
               <Text
                 style={{
                   flex: 1,
@@ -315,7 +334,7 @@ export default function RecipeDetailedScreen(props) {
                   );
                 })}
               </View>
-            </View>
+            </Animated.View>
           </View>
         )}
       </>

@@ -42,7 +42,7 @@ export default function WelcomeScreen() {
     }, 300);
     setTimeout(() => {
       navigation.navigate('Home');
-    }, 0);
+    }, 2500);
     return () => {};
   }, []);
 

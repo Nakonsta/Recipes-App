@@ -8,6 +8,7 @@ import MasonryList from '@react-native-seoul/masonry-list';
 import { useNavigation } from '@react-navigation/native';
 import { View, Text, Pressable, Image } from 'react-native';
 import React from 'react';
+import RecipeCard from './RecipeCard';
 
 export default function Recipes({ recipes, ingredients, measures }) {
   const navigation = useNavigation();
@@ -36,80 +37,19 @@ export default function Recipes({ recipes, ingredients, measures }) {
             В данной категории рецептов нет
           </Text>
         ) : (
-          <MasonryList
-            data={recipes}
-            keyExtractor={(item) => item.id}
-            numColumns={2}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item, i }) => (
+          recipes.map((item) => {
+            return (
               <RecipeCard
-                index={i}
+                key={item.id}
                 item={item}
                 navigation={navigation}
                 ingredients={ingredients}
                 measures={measures}
               />
-            )}
-            // refreshing={isLoadingNext}
-            // onRefresh={() => refetch({ first: ITEM_CNT })}
-            onEndReachedThreshold={0.1}
-            // onEndReached={() => loadNext(ITEM_CNT)}
-          />
+            );
+          })
         )}
       </View>
     </View>
   );
 }
-
-const RecipeCard = ({ item, index, navigation, ingredients, measures }) => {
-  let isOdd = index % 2 === 0;
-  const paramsInfo = {
-    item,
-    ingredients,
-    measures,
-  };
-
-  return (
-    <Animated.View
-      entering={FadeInDown.delay(index * 100)
-        .duration(600)
-        .springify()
-        .damping(12)}
-      style={tw`pt-3`}
-    >
-      <Pressable
-        style={{
-          width: '100%',
-          marginBottom: 4,
-          justifyContent: 'center',
-          paddingLeft: isOdd ? 0 : 8,
-          paddingRight: isOdd ? 8 : 0,
-        }}
-        onPress={() => navigation.navigate('RecipeDetailed', { ...paramsInfo })}
-      >
-        <Image
-          source={{ uri: item.imageUrl }}
-          style={{
-            width: '100%',
-            height: index % 3 === 0 ? hp(25) : hp(35),
-            borderRadius: 15,
-            objectFit: 'cover',
-          }}
-        ></Image>
-        <Text
-          style={{
-            marginTop: 6,
-            marginLeft: 4,
-            color: 'white',
-            fontFamily: 'Comfortaa-Light',
-            fontSize: hp(2),
-          }}
-        >
-          {item.title.length > 15
-            ? item.title.slice(0, 15) + '...'
-            : item.title}
-        </Text>
-      </Pressable>
-    </Animated.View>
-  );
-};

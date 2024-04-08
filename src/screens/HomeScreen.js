@@ -21,9 +21,9 @@ import Recipes from '../components/Recipes';
 import Loading from '../components/Loading';
 
 const Greeting = styled.Text`
-  padding: 20px 0 5px;
-  font-size: 20px;
-  font-family: 'Comfortaa-Light';
+  padding: 5px 5px 5px 0;
+  font-size: 24px;
+  font-family: 'Comfortaa-Bold';
   color: white;
 `;
 
@@ -34,19 +34,35 @@ export default function HomeScreen() {
   const [categories, setCategories] = useState([]);
   const [ingredients, setIngredients] = useState();
   const [measures, setMeasures] = useState();
+  const [isPopularShown, setIsPopularShown] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const recipesOfActiveCategory = useMemo(() => {
-    const activeCategoryId = activeCategory?.id ? activeCategory.id : 2;
+    if (searchQuery) {
+      setIsPopularShown(false);
+      setActiveCategory(null);
+
+      return recipes.filter((recipe) => recipe.title.includes(searchQuery));
+    } else if (!isPopularShown && !activeCategory) {
+      setIsPopularShown(true);
+      return recipes.filter((recipe) => recipe.isPopular === 1);
+    }
+
+    if (isPopularShown) {
+      return recipes.filter((recipe) => recipe.isPopular === 1);
+    }
+
+    const activeCategoryId = activeCategory?.id ? activeCategory.id : null;
 
     return recipes.filter((recipe) => recipe.categoryId === activeCategoryId);
-  }, [recipes, activeCategory]);
+  }, [recipes, activeCategory, searchQuery]);
 
   const fetchCategories = () => {
     axios
       .get(`https://food-backend-2024-f556bc1359f3.herokuapp.com/categories`)
       .then(({ data }) => {
         setCategories(data);
-        if (data?.length) setActiveCategory(data[1]);
+        setIsPopularShown(true);
       })
       .catch((err) => {
         console.log(err);
@@ -107,7 +123,20 @@ export default function HomeScreen() {
         contentContainerStyle={{ paddingBottom: 50 }}
         style={tw`pt-5 mx-4`}
       >
-        <View style={tw` flex-row justify-between items-center mb-2`}>
+        <View style={tw`flex-row justify-between items-center mb-4`}>
+          <View style={tw` `}>
+            <Greeting>Привет,</Greeting>
+            <View style={tw`flex-row items-center`}>
+              <Greeting>я Настя!</Greeting>
+              <Image
+                source={require('../../assets/img/hi.png')}
+                style={{
+                  height: hp(2.5),
+                  width: hp(2.5),
+                }}
+              />
+            </View>
+          </View>
           <Image
             source={require('../../assets/img/avatar.jpg')}
             style={{
@@ -116,11 +145,9 @@ export default function HomeScreen() {
               borderRadius: 100,
             }}
           />
-          <BellIcon size={hp(4)} color='white' />
         </View>
-        <View style={tw`mb-2`}>
-          <Greeting>Привет!</Greeting>
-        </View>
+        <Text>{searchQuery}</Text>
+
         <View
           style={{
             display: 'flex',
@@ -133,6 +160,7 @@ export default function HomeScreen() {
           }}
         >
           <TextInput
+            value={searchQuery}
             placeholder='Введите название рецепта'
             placeholderTextColor={'#777'}
             style={{
@@ -145,6 +173,7 @@ export default function HomeScreen() {
               fontFamily: '',
               fontSize: hp(1.7),
             }}
+            onChangeText={setSearchQuery}
           />
           <View style={tw`rounded-full p-3`}>
             <MagnifyingGlassIcon size={hp(4)} color='#999' />
@@ -155,7 +184,9 @@ export default function HomeScreen() {
             <Categories
               categories={categories}
               activeCategory={activeCategory}
+              isPopularShown={isPopularShown}
               setActiveCategory={setActiveCategory}
+              setIsPopularShown={setIsPopularShown}
             />
           )}
         </View>

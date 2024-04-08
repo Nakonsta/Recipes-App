@@ -19,10 +19,37 @@ import { ScrollView, View, Text, Image, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Loading from '../components/Loading';
 import { Ingredient } from '../components/Ingredient';
+import { Ingredients } from '../components/Ingredients';
 
 const RecipeImage = styled.View`
+  position: relative;
   flex-direction: row;
   justify-content: center;
+`;
+
+const InfoContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0;
+  padding: 18px 32px;
+  border: 1px solid #595c61;
+  border-radius: 20px;
+`;
+
+const InfoNumber = styled.Text`
+  padding-bottom: 6px;
+  font-size: 20px;
+  font-family: 'Comfortaa-Bold';
+  text-align: center;
+  color: #ffe598;
+`;
+
+const InfoText = styled.Text`
+  font-size: 13px;
+  font-family: 'Comfortaa-Light';
+  color: #9c9fa3;
 `;
 
 export default function RecipeDetailedScreen(props) {
@@ -56,12 +83,26 @@ export default function RecipeDetailedScreen(props) {
 
   return (
     <ScrollView
-      style={tw`flex-1 bg-gray-900`}
+      style={{
+        flex: 1,
+        backgroundColor: '#12151e',
+      }}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 30 }}
     >
-      <StatusBar style='light' />
+      <StatusBar style='light' hidden />
       <>
+        <Animated.View
+          entering={FadeIn.delay(200).duration(1000)}
+          style={tw`w-full absolute z-3 flex-row justify-between items-center pt-18`}
+        >
+          <Pressable
+            style={tw`p-2 rounded-full ml-5`}
+            onPress={() => navigation.goBack()}
+          >
+            <ChevronLeftIcon size={hp(3)} strokeWidth={1.2} color='white' />
+          </Pressable>
+        </Animated.View>
         <RecipeImage>
           <Image
             source={{ uri: item.imageUrl }}
@@ -72,269 +113,131 @@ export default function RecipeDetailedScreen(props) {
             }}
           ></Image>
         </RecipeImage>
-        <Animated.View
-          entering={FadeIn.delay(200).duration(1000)}
-          style={tw`w-full absolute flex-row justify-between items-center pt-40`}
-        >
-          <Pressable
-            style={tw`p-2 rounded-full ml-5 bg-white bg-opacity-75`}
-            onPress={() => navigation.goBack()}
-          >
-            <ChevronLeftIcon size={hp(2.5)} strokeWidth={3} color='#444' />
-          </Pressable>
-        </Animated.View>
         {item && (
-          <View style={tw`flex justify-between pt-8 mx-4`}>
+          <View style={tw`flex justify-between`}>
             <Animated.View
               entering={FadeInDown.duration(700).springify().damping(12)}
               style={tw``}
             >
               <Text
                 style={{
-                  fontSize: hp(3),
-                  color: 'white',
-                  fontFamily: 'Comfortaa-Light',
-                }}
-              >
-                {item.title}
-              </Text>
-              <Text
-                style={{
-                  paddingTop: 10,
+                  width: '100%',
+                  textAlign: 'center',
                   fontSize: hp(2),
                   color: 'white',
-                  fontFamily: 'Comfortaa-Light',
+                  fontFamily: 'Comfortaa-Bold',
                 }}
-              >
-                {item.description}
-              </Text>
+              ></Text>
             </Animated.View>
             <Animated.View
               entering={FadeInDown.delay(100).duration(700)}
-              style={tw`flex-row justify-around pt-3`}
+              style={tw`flex-row justify-around pt-3 mx-4`}
             >
-              <View style={tw`flex rounded-full bg-amber-300 p-2`}>
-                <View
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: hp(6.5),
-                    width: hp(6.5),
-                    backgroundColor: 'white',
-                    borderRadius: 100,
-                  }}
-                >
-                  <ClockIcon size={hp(4)} strokeWidth={2.5} color='#525252' />
+              <InfoContainer>
+                <View>
+                  <InfoNumber>{item.time}</InfoNumber>
+                  <InfoText>минут</InfoText>
                 </View>
-                <View style={tw`flex items-center py-2`}>
-                  <Text
-                    style={{
-                      fontSize: hp(1.5),
-                      color: '#525252',
-                      fontFamily: 'Comfortaa-Light',
-                    }}
-                  >
-                    35
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: hp(1.5),
-                      color: '#525252',
-                      fontFamily: 'Comfortaa-Light',
-                    }}
-                  >
-                    мин
-                  </Text>
+                <View>
+                  <InfoNumber>500</InfoNumber>
+                  <InfoText>грамм</InfoText>
                 </View>
-              </View>
-              <View style={tw`flex rounded-full bg-amber-300 p-2`}>
-                <View
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: hp(6.5),
-                    width: hp(6.5),
-                    backgroundColor: 'white',
-                    borderRadius: 100,
-                  }}
-                >
-                  <UsersIcon size={hp(4)} strokeWidth={2.5} color='#525252' />
+                <View>
+                  <InfoNumber>{item.portions}</InfoNumber>
+                  <InfoText>порций</InfoText>
                 </View>
-                <View style={tw`flex items-center py-2`}>
-                  <Text
-                    style={{
-                      fontSize: hp(1.5),
-                      color: '#525252',
-                      fontFamily: 'Comfortaa-Light',
-                    }}
-                  >
-                    3
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: hp(1.5),
-                      color: '#525252',
-                      fontFamily: 'Comfortaa-Light',
-                    }}
-                  >
-                    лайка
-                  </Text>
-                </View>
-              </View>
-              <View style={tw`flex rounded-full bg-amber-300 p-2`}>
-                <View
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: hp(6.5),
-                    width: hp(6.5),
-                    backgroundColor: 'white',
-                    borderRadius: 100,
-                  }}
-                >
-                  <FireIcon size={hp(4)} strokeWidth={2.5} color='#525252' />
-                </View>
-                <View style={tw`flex items-center py-2`}>
-                  <Text
-                    style={{
-                      fontSize: hp(1.5),
-                      color: '#525252',
-                      fontFamily: 'Comfortaa-Light',
-                    }}
-                  >
-                    420
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: hp(1.5),
-                      color: '#525252',
-                      fontFamily: 'Comfortaa-Light',
-                    }}
-                  >
-                    ккал
-                  </Text>
-                </View>
-              </View>
-              <View style={tw`flex rounded-full bg-amber-300 p-2`}>
-                <View
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: hp(6.5),
-                    width: hp(6.5),
-                    backgroundColor: 'white',
-                    borderRadius: 100,
-                  }}
-                >
-                  <Square3Stack3DIcon
-                    size={hp(4)}
-                    strokeWidth={2.5}
-                    color='#525252'
-                  />
-                </View>
-                <View style={tw`flex items-center py-2`}>
-                  <Text
-                    style={{
-                      fontSize: hp(1.5),
-                      color: '#525252',
-                      fontFamily: 'Comfortaa-Light',
-                    }}
-                  >
-                    Very
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: hp(1.5),
-                      color: '#525252',
-                      fontFamily: 'Comfortaa-Light',
-                    }}
-                  >
-                    easy
-                  </Text>
-                </View>
-              </View>
+              </InfoContainer>
             </Animated.View>
-            <Animated.View
-              entering={FadeInDown.delay(200)
-                .duration(700)
-                .springify()
-                .damping(12)}
-              style={tw`pt-6`}
+            <View
+              style={{
+                marginHorizontal: 10,
+                marginTop: 10,
+                paddingHorizontal: 10,
+                borderRadius: 20,
+                backgroundColor: '#171d2b',
+              }}
             >
-              <Text
-                style={{
-                  flex: 1,
-                  fontSize: hp(2),
-                  color: 'white',
-                  fontFamily: 'Comfortaa-Light',
-                }}
+              <Animated.View
+                entering={FadeInDown.delay(200)
+                  .duration(700)
+                  .springify()
+                  .damping(12)}
+                style={tw`pt-2`}
               >
-                Ингредиенты
-              </Text>
-              <View style={tw`ml-1`}>
-                {item.RecipeIngredients.map((ingr, index) => {
-                  return (
-                    <View key={index}>
-                      <Ingredient
-                        measures={measures}
-                        ingredients={ingredients}
-                        ingredient={ingr}
-                      />
-                    </View>
-                  );
-                })}
-              </View>
-            </Animated.View>
-            <Animated.View
-              entering={FadeInDown.delay(200)
-                .duration(700)
-                .springify()
-                .damping(12)}
-              style={tw`pt-6`}
-            >
-              <Text
-                style={{
-                  flex: 1,
-                  paddingBottom: 16,
-                  fontSize: hp(2),
-                  color: 'white',
-                  fontFamily: 'Comfortaa-Light',
-                }}
+                <Ingredients
+                  recipeIngredients={item.RecipeIngredients}
+                  measures={measures}
+                  ingredients={ingredients}
+                />
+              </Animated.View>
+              <Animated.View
+                entering={FadeInDown.delay(200)
+                  .duration(700)
+                  .springify()
+                  .damping(12)}
+                style={tw`pt-2`}
               >
-                Этапы приготовления
-              </Text>
-              <View style={tw`ml-1`}>
-                {item.RecipeSteps.map((step, index) => {
-                  return (
-                    <View key={index} style={tw`flex-row pb-3`}>
-                      <Text
-                        style={{
-                          width: 20,
-                          fontSize: hp(2),
-                          color: 'white',
-                          fontFamily: 'Comfortaa-Light',
-                        }}
-                      >
-                        {step.stepNumber}.
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: hp(2),
-                          color: 'white',
-                          fontFamily: 'Comfortaa-Light',
-                        }}
-                      >
-                        {step.stepText}
-                      </Text>
-                    </View>
-                  );
-                })}
-              </View>
-            </Animated.View>
+                <View style={tw`ml-1`}>
+                  {item.RecipeIngredients.map((ingr, index) => {
+                    return (
+                      <View key={index}>
+                        <Ingredient
+                          measures={measures}
+                          ingredients={ingredients}
+                          ingredient={ingr}
+                        />
+                      </View>
+                    );
+                  })}
+                </View>
+              </Animated.View>
+              <Animated.View
+                entering={FadeInDown.delay(200)
+                  .duration(700)
+                  .springify()
+                  .damping(12)}
+                style={tw`pt-6`}
+              >
+                <Text
+                  style={{
+                    flex: 1,
+                    paddingBottom: 16,
+                    fontSize: hp(2),
+                    color: 'white',
+                    fontFamily: 'Comfortaa-Light',
+                  }}
+                >
+                  Этапы приготовления
+                </Text>
+                <View style={tw`ml-1`}>
+                  {item.RecipeSteps.map((step, index) => {
+                    return (
+                      <View key={index} style={tw`flex-row pb-3`}>
+                        <Text
+                          style={{
+                            width: 20,
+                            fontSize: hp(2),
+                            color: 'white',
+                            fontFamily: 'Comfortaa-Light',
+                          }}
+                        >
+                          {step.stepNumber}.
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: hp(2),
+                            color: 'white',
+                            fontFamily: 'Comfortaa-Light',
+                          }}
+                        >
+                          {step.stepText}
+                        </Text>
+                      </View>
+                    );
+                  })}
+                </View>
+              </Animated.View>
+            </View>
           </View>
         )}
       </>

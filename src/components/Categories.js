@@ -1,7 +1,7 @@
 import tw from 'twrnc';
 import styled from 'styled-components/native';
 import Animated, { FadeInDown, FadeOut } from 'react-native-reanimated';
-import React from 'react';
+import React, { useState } from 'react';
 import { View, ScrollView, Pressable, StyleSheet, Text } from 'react-native';
 
 const CategoryItem = styled.View`
@@ -28,6 +28,8 @@ export default function Categories({
   categories,
   activeCategory,
   setActiveCategory,
+  isPopularShown,
+  setIsPopularShown,
 }) {
   return (
     <Animated.View entering={FadeInDown.duration(800).springify()}>
@@ -36,6 +38,30 @@ export default function Categories({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 0, paddingTop: 5 }}
       >
+        <Pressable
+          style={tw`flex items-center pt-2`}
+          onPress={() => {
+            setActiveCategory(null);
+            setIsPopularShown(true);
+          }}
+        >
+          <CategoryItem
+            style={{
+              borderColor: isPopularShown ? 'orange' : 'white',
+            }}
+          >
+            <CategoryImg
+              source={require('../../assets/img/fire.png')}
+            ></CategoryImg>
+            <CategoryText
+              style={{
+                color: isPopularShown ? 'orange' : 'white',
+              }}
+            >
+              Популярное
+            </CategoryText>
+          </CategoryItem>
+        </Pressable>
         {categories?.length > 0 &&
           categories.map((category, index) => {
             const isActive = category?.id === activeCategory?.id;
@@ -44,7 +70,10 @@ export default function Categories({
               <Pressable
                 key={index}
                 style={tw`flex items-center pt-2`}
-                onPress={() => setActiveCategory(category)}
+                onPress={() => {
+                  setIsPopularShown(false);
+                  setActiveCategory(category);
+                }}
               >
                 <CategoryItem
                   style={{

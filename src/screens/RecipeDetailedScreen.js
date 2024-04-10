@@ -8,13 +8,7 @@ import { StatusBar } from 'expo-status-bar';
 import styled from 'styled-components/native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
-import {
-  ChevronLeftIcon,
-  ClockIcon,
-  UsersIcon,
-  FireIcon,
-  Square3Stack3DIcon,
-} from 'react-native-heroicons/outline';
+import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import { ScrollView, View, Text, Image, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Loading from '../components/Loading';
@@ -57,6 +51,8 @@ export default function RecipeDetailedScreen(props) {
   const item = props.route.params?.item;
   const measures = props.route.params?.measures;
   const ingredients = props.route.params?.ingredients;
+  const [isFullIngredientsListShown, setIsFullIngredientsListShown] =
+    useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [recipe, setRecipe] = useState(null);
 
@@ -175,7 +171,7 @@ export default function RecipeDetailedScreen(props) {
                   .duration(700)
                   .springify()
                   .damping(12)}
-                style={tw`pt-2`}
+                style={tw`pt-2 hidden`}
               >
                 <View style={tw`ml-1`}>
                   {item.RecipeIngredients.map((ingr, index) => {
@@ -200,6 +196,7 @@ export default function RecipeDetailedScreen(props) {
               >
                 <Text
                   style={{
+                    display: 'none',
                     flex: 1,
                     paddingBottom: 16,
                     fontSize: hp(2),
@@ -212,26 +209,57 @@ export default function RecipeDetailedScreen(props) {
                 <View style={tw`ml-1`}>
                   {item.RecipeSteps.map((step, index) => {
                     return (
-                      <View key={index} style={tw`flex-row pb-3`}>
-                        <Text
+                      <View key={index} style={{}}>
+                        <View
+                          key={index}
                           style={{
-                            width: 20,
-                            fontSize: hp(2),
-                            color: 'white',
-                            fontFamily: 'Comfortaa-Light',
+                            position: 'relative',
+                            marginLeft: 10,
+                            paddingLeft: 30,
+                            paddingBottom: 30,
+                            borderLeftWidth: 1,
+                            borderLeftColor:
+                              index !== item.RecipeSteps.length - 1
+                                ? '#d6fc51'
+                                : '#171d2b',
                           }}
                         >
-                          {step.stepNumber}.
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: hp(2),
-                            color: 'white',
-                            fontFamily: 'Comfortaa-Light',
-                          }}
-                        >
-                          {step.stepText}
-                        </Text>
+                          <View
+                            key={index}
+                            style={{
+                              zIndex: 4,
+                              position: 'absolute',
+                              top: 0,
+                              left: -15,
+                              width: 30,
+                              height: 30,
+                              borderRadius: 100,
+                              backgroundColor: '#d6fc51',
+                              borderLeftWidth: 1,
+                              borderLeftColor: '#d6fc51',
+                            }}
+                          ></View>
+                          <Text
+                            style={{
+                              paddingBottom: 8,
+                              fontSize: hp(2.1),
+                              color: 'white',
+                              fontFamily: 'Comfortaa-Bold',
+                            }}
+                          >
+                            Шаг {step.stepNumber}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: hp(1.9),
+                              lineHeight: 22,
+                              color: '#9c9fa3',
+                              fontFamily: 'Comfortaa-Light',
+                            }}
+                          >
+                            {step.stepText}
+                          </Text>
+                        </View>
                       </View>
                     );
                   })}

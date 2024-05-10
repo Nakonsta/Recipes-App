@@ -2,7 +2,7 @@
   "expo": {
     "name": "Nastia-Chef",
     "slug": "Nastia-Chef",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -22,7 +22,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.nakonsta.NastiaChef"
+      "package": "com.nakonsta.NastiaChef",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/img/favicon.png"

@@ -47,57 +47,6 @@ export default function WelcomeScreen() {
   }, []);
 
   return (
-    <View style={tw`flex-1 justify-center items-center bg-gray-900`}>
-      <StatusBar style='light' />
-      <Animated.View
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: firstRingPadding,
-          borderRadius: 200,
-          backgroundImage: "url('../../assets/img/bg2.png')",
-          backgroundPosition: '50% 50%',
-          backgroundSize: 'cover',
-          backgroundColor: '#DF7C5D',
-        }}
-      >
-        <Animated.View
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: secondRingPadding,
-            borderRadius: 200,
-            backgroundColor: '#581609',
-          }}
-        >
-          <Image
-            source={require('../../assets/img/coffee3.jpg')}
-            style={{
-              height: hp(24.5),
-              width: hp(24.5),
-              borderRadius: 200,
-            }}
-          />
-        </Animated.View>
-      </Animated.View>
-
-      <TextsContainer>
-        <TextInner>Nastia Chef</TextInner>
-        <Text
-          style={{
-            paddingTop: 8,
-            fontFamily: 'Comfortaa-Light',
-            fontSize: hp(2.5),
-            fontStyle: 'italic',
-            color: 'white',
-            textAlign: 'center',
-          }}
-        >
-          Food recipes
-        </Text>
-      </TextsContainer>
-    </View>
+    <View style={tw`flex-1 justify-center items-center bg-gray-900`}></View>
   );
 }

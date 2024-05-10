@@ -83,7 +83,7 @@ export default function RecipeCard({
                   color: '#f0db92',
                 }}
               >
-                6 порций
+                {item.portions} порц.
               </Text>
             </View>
             <Text

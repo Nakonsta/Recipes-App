@@ -155,7 +155,7 @@ export default function RecipeDetailedScreen(props) {
                 {item.portions && (
                   <View>
                     <InfoNumber>{item.portions}</InfoNumber>
-                    <InfoText>порций</InfoText>
+                    <InfoText>порц.</InfoText>
                   </View>
                 )}
               </InfoContainer>

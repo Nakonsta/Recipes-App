@@ -23,14 +23,6 @@ export const Ingredients = ({ recipeIngredients, measures, ingredients }) => {
     if (ingredientItem) return ingredientItem.image;
   };
 
-  const getIngredientMeasure = (id) => {
-    if (!id || !measures?.length) return '';
-
-    const measureItem = measures.find((measure) => measure.id === id);
-
-    if (measureItem) return measureItem.title;
-  };
-
   return (
     <ScrollView horizontal>
       {recipeIngredients?.length &&

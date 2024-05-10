@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Recipes-App",
-    "slug": "Recipes-App",
+    "name": "Nastia-Chef",
+    "slug": "Nastia-Chef",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.nakonsta.NastiaChef"
     },
     "web": {
       "favicon": "./assets/img/favicon.png"
@@ -30,9 +31,16 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/Quicksand/Quicksand-Medium.ttf"]
+          "fonts": [
+            "./assets/fonts/Quicksand/Quicksand-Medium.ttf"
+          ]
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "e1a7c577-e8a9-4541-b052-52883e2b0abb"
+      }
+    }
   }
 }

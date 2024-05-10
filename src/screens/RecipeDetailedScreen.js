@@ -9,11 +9,19 @@ import styled from 'styled-components/native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
-import { ScrollView, View, Text, Image, Pressable } from 'react-native';
+import {
+  ScrollView,
+  View,
+  Text,
+  Image,
+  Pressable,
+  Platform,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Loading from '../components/Loading';
 import { Ingredient } from '../components/Ingredient';
 import { Ingredients } from '../components/Ingredients';
+import { IngredientsToggler } from '../components/IngredientsToggler';
 
 const RecipeImage = styled.View`
   position: relative;
@@ -36,12 +44,14 @@ const InfoNumber = styled.Text`
   padding-bottom: 6px;
   font-size: 20px;
   font-family: 'Comfortaa-Bold';
+  line-height: 20px;
   text-align: center;
-  color: #ffe598;
+  color: #fff175;
 `;
 
 const InfoText = styled.Text`
   font-size: 13px;
+  line-height: 13px;
   font-family: 'Comfortaa-Light';
   color: #9c9fa3;
 `;
@@ -96,7 +106,7 @@ export default function RecipeDetailedScreen(props) {
             style={tw`p-2 rounded-full ml-5`}
             onPress={() => navigation.goBack()}
           >
-            <ChevronLeftIcon size={hp(3)} strokeWidth={1.2} color='white' />
+            <ChevronLeftIcon size={hp(3.5)} strokeWidth={2.5} color='white' />
           </Pressable>
         </Animated.View>
         <RecipeImage>
@@ -130,18 +140,24 @@ export default function RecipeDetailedScreen(props) {
               style={tw`flex-row justify-around pt-3 mx-4`}
             >
               <InfoContainer>
-                <View>
-                  <InfoNumber>{item.time}</InfoNumber>
-                  <InfoText>минут</InfoText>
-                </View>
-                <View>
-                  <InfoNumber>500</InfoNumber>
-                  <InfoText>грамм</InfoText>
-                </View>
-                <View>
-                  <InfoNumber>{item.portions}</InfoNumber>
-                  <InfoText>порций</InfoText>
-                </View>
+                {item.time && (
+                  <View>
+                    <InfoNumber>{item.time}</InfoNumber>
+                    <InfoText>минут</InfoText>
+                  </View>
+                )}
+                {item.gr && (
+                  <View>
+                    <InfoNumber>{item.gr}</InfoNumber>
+                    <InfoText>грамм</InfoText>
+                  </View>
+                )}
+                {item.portions && (
+                  <View>
+                    <InfoNumber>{item.portions}</InfoNumber>
+                    <InfoText>порций</InfoText>
+                  </View>
+                )}
               </InfoContainer>
             </Animated.View>
             <View
@@ -150,7 +166,7 @@ export default function RecipeDetailedScreen(props) {
                 marginTop: 10,
                 paddingHorizontal: 10,
                 borderRadius: 20,
-                backgroundColor: '#171d2b',
+                backgroundColor: '#161D2C',
               }}
             >
               <Animated.View
@@ -158,35 +174,38 @@ export default function RecipeDetailedScreen(props) {
                   .duration(700)
                   .springify()
                   .damping(12)}
-                style={tw`pt-2`}
+                style={tw`flex-row pt-2`}
               >
+                <IngredientsToggler
+                  isFullIngredientsListShown={isFullIngredientsListShown}
+                  setIsFullIngredientsListShown={setIsFullIngredientsListShown}
+                />
                 <Ingredients
                   recipeIngredients={item.RecipeIngredients}
                   measures={measures}
                   ingredients={ingredients}
                 />
               </Animated.View>
-              <Animated.View
-                entering={FadeInDown.delay(200)
-                  .duration(700)
-                  .springify()
-                  .damping(12)}
-                style={tw`pt-2 hidden`}
-              >
-                <View style={tw`ml-1`}>
-                  {item.RecipeIngredients.map((ingr, index) => {
-                    return (
-                      <View key={index}>
-                        <Ingredient
-                          measures={measures}
-                          ingredients={ingredients}
-                          ingredient={ingr}
-                        />
-                      </View>
-                    );
-                  })}
-                </View>
-              </Animated.View>
+              {isFullIngredientsListShown && (
+                <Animated.View
+                  entering={FadeInDown.duration(700).springify().damping(12)}
+                  style={tw`pt-2`}
+                >
+                  <View style={tw`ml-1`}>
+                    {item.RecipeIngredients.map((ingr, index) => {
+                      return (
+                        <View key={index}>
+                          <Ingredient
+                            measures={measures}
+                            ingredients={ingredients}
+                            ingredient={ingr}
+                          />
+                        </View>
+                      );
+                    })}
+                  </View>
+                </Animated.View>
+              )}
               <Animated.View
                 entering={FadeInDown.delay(200)
                   .duration(700)
@@ -220,23 +239,28 @@ export default function RecipeDetailedScreen(props) {
                             borderLeftWidth: 1,
                             borderLeftColor:
                               index !== item.RecipeSteps.length - 1
-                                ? '#d6fc51'
-                                : '#171d2b',
+                                ? Platform.OS === 'ios'
+                                  ? '#c5fd52'
+                                  : '#a5bd02'
+                                : '#161D2C',
                           }}
                         >
                           <View
                             key={index}
                             style={{
-                              zIndex: 4,
+                              zIndex: 14,
                               position: 'absolute',
                               top: 0,
                               left: -15,
                               width: 30,
                               height: 30,
                               borderRadius: 100,
-                              backgroundColor: '#d6fc51',
+                              opacity: 1,
+                              backgroundColor:
+                                Platform.OS === 'ios' ? '#c5fd52' : '#a5bd02',
                               borderLeftWidth: 1,
-                              borderLeftColor: '#d6fc51',
+                              borderLeftColor:
+                                Platform.OS === 'ios' ? '#c5fd52' : '#a5bd02',
                             }}
                           ></View>
                           <Text

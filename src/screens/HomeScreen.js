@@ -21,9 +21,10 @@ import Recipes from '../components/Recipes';
 import Loading from '../components/Loading';
 
 const Greeting = styled.Text`
-  padding: 5px 5px 5px 0;
+  padding: 0 5px;
   font-size: 24px;
   font-family: 'Comfortaa-Bold';
+  line-height: 30px;
   color: white;
 `;
 
@@ -116,12 +117,12 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={tw`flex-1 justify-center px-4 bg-gray-900`}>
+    <SafeAreaView style={tw`flex-1 justify-center px-4 pt-7 bg-gray-900`}>
       <StatusBar style='light' />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 50 }}
-        style={tw`pt-5 mx-4`}
+        contentContainerStyle={{ paddingBottom: 50, paddingTop: 20 }}
+        style={tw`mx-4`}
       >
         <View style={tw`flex-row justify-between items-center mb-4`}>
           <View style={tw` `}>
@@ -185,7 +186,10 @@ export default function HomeScreen() {
               categories={categories}
               activeCategory={activeCategory}
               isPopularShown={isPopularShown}
-              setActiveCategory={setActiveCategory}
+              setActiveCategory={(cat) => {
+                setSearchQuery('');
+                setActiveCategory(cat);
+              }}
               setIsPopularShown={setIsPopularShown}
             />
           )}

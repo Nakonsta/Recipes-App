@@ -10,7 +10,6 @@ const CategoryItem = styled.View`
   margin-right: 10px;
   padding: 3px 5px;
   border: 1px solid white;
-  border-radius: 50%;
 `;
 
 const CategoryImg = styled.Image`
@@ -48,6 +47,7 @@ export default function Categories({
           <CategoryItem
             style={{
               borderColor: isPopularShown ? 'orange' : 'white',
+              borderRadius: 100,
             }}
           >
             <CategoryImg
@@ -77,6 +77,7 @@ export default function Categories({
               >
                 <CategoryItem
                   style={{
+                    borderRadius: 100,
                     borderColor: isActive ? 'orange' : 'white',
                   }}
                 >

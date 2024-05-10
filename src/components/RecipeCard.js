@@ -43,7 +43,7 @@ export default function RecipeCard({
           paddingVertical: hp(2),
           paddingHorizontal: hp(2),
           borderRadius: 16,
-          backgroundColor: '#171d2b',
+          backgroundColor: '#161D2C',
         }}
         onPress={() => navigation.navigate('RecipeDetailed', { ...paramsInfo })}
       >

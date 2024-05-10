@@ -40,9 +40,9 @@ export default function WelcomeScreen() {
     setTimeout(() => {
       firstRingPadding.value = withSpring(firstRingPadding.value + hp(2.5));
     }, 300);
-    setTimeout(() => {
-      navigation.navigate('Home');
-    }, 2500);
+    // setTimeout(() => {
+    //   navigation.navigate('Home');
+    // }, 2500);
     return () => {};
   }, []);
 
@@ -56,7 +56,10 @@ export default function WelcomeScreen() {
           alignItems: 'center',
           padding: firstRingPadding,
           borderRadius: 200,
-          backgroundColor: '#525350',
+          backgroundImage: "url('../../assets/img/bg2.png')",
+          backgroundPosition: '50% 50%',
+          backgroundSize: 'cover',
+          backgroundColor: '#DF7C5D',
         }}
       >
         <Animated.View
@@ -66,11 +69,11 @@ export default function WelcomeScreen() {
             alignItems: 'center',
             padding: secondRingPadding,
             borderRadius: 200,
-            backgroundColor: '#86B242',
+            backgroundColor: '#581609',
           }}
         >
           <Image
-            source={require('../../assets/img/Nastia.jpeg')}
+            source={require('../../assets/img/coffee3.jpg')}
             style={{
               height: hp(24.5),
               width: hp(24.5),
